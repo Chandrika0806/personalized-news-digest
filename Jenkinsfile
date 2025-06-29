@@ -1,12 +1,12 @@
 pipeline {
     agent any
     triggers {
-        cron('H 7 * * *')  // Runs daily at 7AM
+        cron('H 8,13,19 * * *') // 3x daily
     }
     stages {
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/YOUR_USERNAME/personalized-news-digest.git'
+                git credentialsId: 'github-pat', url: 'https://github.com/Chandrika0806/personalized-news-digest.git'
             }
         }
         stage('Build Docker Image') {
