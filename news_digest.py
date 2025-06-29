@@ -1,54 +1,5 @@
 import requests
 import json
-
-API_KEY = 'a85520c611194e80a7e989fad1db00b3'  # 🔐 Replace this with your real NewsAPI key
-NEWS_URL = 'https://newsapi.org/v2/top-headlines'
-
-# Function to get news from a category
-def get_news(category):
-    params = {
-        'apiKey': API_KEY,
-        'category': category,   # Must be a valid NewsAPI category
-        'country': 'us',        # 'us' ensures headlines are always available
-        'pageSize': 5
-    }
-    response = requests.get(NEWS_URL, params=params)
-    articles = response.json().get('articles', [])
-    return [f"{i+1}. {a['title']}" for i, a in enumerate(articles)]
-
-# Simulate sending email by printing it (safe for testing)
-def simulate_email(to, subject, body):
-    print(f"\n=== 📧 Sending to {to} ===")
-    print(f"Subject: {subject}")
-    print(body)
-    print("✅ Done.\n")
-
-# Load user preferences
-with open('users.json') as f:
-    users = json.load(f)
-
-# Loop through users and fetch/send personalized news
-for user in users:
-    category = user.get('category', 'general')
-    headlines = get_news(category)
-
-    if not headlines:
-        print(f"⚠️ No headlines found for '{category}'")
-        continue
-
-    body = (
-        f"Hi {user['name']},\n\n"
-        f"Here are your top '{category}' news headlines today:\n\n"
-        + "\n".join(headlines)
-    )
-
-    subject = f"Your '{category.title()}' News Digest"
-    simulate_email(user['email'], subject, body)
-
-
-
-import requests
-import json
 from email.mime.text import MIMEText
 import smtplib
 from datetime import date
